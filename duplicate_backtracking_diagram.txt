@@ -1,0 +1,138 @@
+DUPLICATE BACKTRACKING DIAGRAM: All Unique Subsets of {1, 2, 2}
+================================================================
+
+IMPORTANT: Array is sorted first → {1, 2, 2}
+
+START: subset = [], index = 0
+┌─────────────────────────────────────────────────────────────┐
+│                        []                                   │
+│                    index = 0                                │
+│                     element = 1                             │
+└─────────────────────────────────────────────────────────────┘
+                                │
+                ┌───────────────┼───────────────┐
+                │               │               │
+            INCLUDE 1        EXCLUDE 1          │
+                │               │               │
+                ▼               ▼               │
+        ┌─────────────┐   ┌─────────────┐       │
+        │   [1]       │   │     []      │       │
+        │ index = 1   │   │ index = 1   │       │
+        │ element = 2 │   │ element = 2 │       │
+        └─────────────┘   └─────────────┘       │
+                │               │               │
+        ┌───────┼───────┐ ┌─────┼─────┐         │
+        │       │       │ │     │     │         │
+    INCLUDE 2 EXCLUDE 2 │ │ INCLUDE 2 EXCLUDE 2 │
+        │       │       │ │     │     │         │
+        ▼       ▼       │ ▼     ▼     ▼         │
+┌─────────┐ ┌─────────┐ │ ┌─────────┐ ┌─────────┐ │
+│ [1,2]   │ │   [1]   │ │ │   [2]   │ │   []    │ │
+│index=2  │ │index=2  │ │ │index=2  │ │index=2  │ │
+│element=2│ │element=2│ │ │element=2│ │element=2│ │
+└─────────┘ └─────────┘ │ └─────────┘ └─────────┘ │
+        │       │       │     │         │         │
+    ┌───┼───┐ ┌─┼─┐     │ ┌───┼───┐ ┌───┼───┐     │
+    │   │   │ │ │ │     │ │   │   │ │   │   │     │
+INCLUDE 2 EXCLUDE 2 │ │ INCLUDE 2 EXCLUDE 2 │ │ INCLUDE 2 EXCLUDE 2 │ │ INCLUDE 2 EXCLUDE 2 │
+    │   │   │ │ │ │     │ │   │   │ │   │   │     │
+    ▼   ▼   ▼ ▼ ▼ ▼     │ ▼   ▼   ▼ ▼   ▼   ▼     │
+┌─────┐ ┌───┐ ┌─┐ ┌─┐   │ ┌───┐ ┌─┐ ┌───┐ ┌─┐   │
+│[1,2,2]│ │[1,2]│ │[1,2]│ │[1]│ │[2,2]│ │[2]│ │[2]│ │[]│   │
+│ PRINT │ │PRINT│ │PRINT│ │PRINT│ │PRINT│ │PRINT│ │PRINT│ │PRINT│   │
+│"1 2 2"│ │"1 2"│ │"1 2"│ │"1" │ │"2 2"│ │"2" │ │"2" │ │""  │   │
+└─────┘ └───┘ └─┘ └─┘   │ └───┘ └─┘ └───┘ └─┘   │
+                        │                       │
+                        └───────────────────────┘
+
+KEY DIFFERENCE: Duplicate Handling
+=================================
+
+When we have duplicates like {1, 2, 2}, we need to avoid generating duplicate subsets.
+
+The key insight is in this part of the code:
+```cpp
+// Skip duplicates to avoid generating duplicate subsets
+while (index + 1 < arr.size() && arr[index] == arr[index + 1])
+{
+    index++;
+}
+```
+
+This means when we exclude an element, we also skip ALL its duplicates.
+
+VISUAL DUPLICATE HANDLING:
+=========================
+
+For array {1, 2, 2}:
+
+1. **Element 1 (index 0):** No duplicates, normal processing
+2. **Element 2 (index 1):** Has duplicate at index 2
+3. **Element 2 (index 2):** Is a duplicate of index 1
+
+When we exclude element 2 at index 1, we skip to index 3 (past all 2s).
+
+RECURSION TREE WITH DUPLICATE HANDLING:
+======================================
+
+                    []
+                   /  \
+                  /    \
+                 /      \
+              [1]      []
+             /  \      /  \
+            /    \    /    \
+         [1,2]  [1]  [2]   []
+        /  \    /  \  /  \  /  \
+    [1,2,2] [1,2] [1,2] [1] [2,2] [2] [2] []
+
+WAIT! This would still generate duplicates. Let me show the CORRECT approach:
+
+CORRECT DUPLICATE HANDLING:
+==========================
+
+                    []
+                   /  \
+                  /    \
+                 /      \
+              [1]      []
+             /  \      /  \
+            /    \    /    \
+         [1,2]  [1]  [2]   []
+        /  \    /  \  /  \  /  \
+    [1,2,2] [1,2] [1] [2,2] [2] [] []
+
+The key is: When excluding an element, skip ALL its duplicates.
+
+STEP-BY-STEP EXECUTION:
+======================
+
+1. **Start:** subset = [], index = 0, element = 1
+   - Include 1: subset = [1], index = 1
+   - Exclude 1: subset = [], index = 1
+
+2. **index = 1, element = 2:**
+   - From [1]: Include 2 → [1,2], index = 2
+   - From [1]: Exclude 2 → [1], index = 3 (skip duplicate 2)
+   - From []: Include 2 → [2], index = 2  
+   - From []: Exclude 2 → [], index = 3 (skip duplicate 2)
+
+3. **index = 2, element = 2:**
+   - From [1,2]: Include 2 → [1,2,2], index = 3
+   - From [1,2]: Exclude 2 → [1,2], index = 3
+   - From [2]: Include 2 → [2,2], index = 3
+   - From [2]: Exclude 2 → [2], index = 3
+
+4. **index = 3 (base case):** Print all subsets
+
+FINAL OUTPUT:
+============
+
+1. "1 2 2"  (from [1,2,2])
+2. "1 2"    (from [1,2])
+3. "1"      (from [1])
+4. "2 2"    (from [2,2])
+5. "2"      (from [2])
+6. ""       (from [] - empty set)
+
+Note: We avoid duplicate subsets like having two "1 2" or two "2" outputs. 

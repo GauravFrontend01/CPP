@@ -1,0 +1,104 @@
+SIMPLE PERMUTATIONS DIAGRAM: All Permutations of {1, 2}
+========================================================
+
+For array {1, 2}: Only 2! = 2 permutations possible
+
+START: arr = [1, 2], index = 0
+┌─────────────────────────────────────────────────────────────┐
+│                    [1, 2]                                  │
+│                    index = 0                               │
+│              Need to place element at position 0           │
+└─────────────────────────────────────────────────────────────┘
+                                │
+                ┌───────────────┼───────────────┐
+                │               │               │
+            SWAP(0,0)       SWAP(0,1)          │
+            [1,2]           [2,1]              │
+                │               │               │
+                ▼               ▼               │
+        ┌─────────────┐   ┌─────────────┐       │
+        │ [1,2]       │   │ [2,1]       │       │
+        │ index = 1   │   │ index = 1   │       │
+        │ pos 1: 2    │   │ pos 1: 1    │       │
+        └─────────────┘   └─────────────┘       │
+                │               │               │
+        ┌───────┼───────┐ ┌─────┼─────┐         │
+        │       │       │ │     │     │         │
+    SWAP(1,1) SWAP(1,1) │ │ SWAP(1,1) SWAP(1,1) │         │
+    [1,2]     [1,2]     │ │ [2,1]     [2,1]     │         │
+        │       │       │ │     │     │         │
+        ▼       ▼       │ ▼     ▼     ▼         │
+┌─────────┐ ┌─────────┐ │ ┌─────────┐ ┌─────────┐ │
+│[1,2]    │ │[1,2]    │ │ │[2,1]    │ │[2,1]    │ │
+│PRINT    │ │PRINT    │ │ │PRINT    │ │PRINT    │ │
+│"1 2"    │ │"1 2"    │ │ │"2 1"    │ │"2 1"    │ │
+└─────────┘ └─────────┘ │ └─────────┘ └─────────┘ │
+                        │                       │
+                        └───────────────────────┘
+
+STEP-BY-STEP EXECUTION:
+======================
+
+1. **Start:** arr = [1,2], index = 0
+   - Try placing 1 at position 0: SWAP(0,0) → [1,2] (no change)
+   - Try placing 2 at position 0: SWAP(0,1) → [2,1]
+
+2. **For [1,2], index = 1:**
+   - Try placing 2 at position 1: SWAP(1,1) → [1,2] (no change)
+   - Base case reached: PRINT "1 2"
+
+3. **For [2,1], index = 1:**
+   - Try placing 1 at position 1: SWAP(1,1) → [2,1] (no change)
+   - Base case reached: PRINT "2 1"
+
+CONSOLE OUTPUT WILL SHOW:
+========================
+
+Initial array: [1, 2]
+
+-> Entering function: index=0, depth=0
+   Current array: [1, 2]
+   Need to place element at position 0
+   Available elements from index 0 to 1
+   -> Trying to place element 1 at position 0
+      Before swap: [1, 2]
+      After swap:  [1, 2] (swapped positions 0 and 0)
+      -> Recursive call: index=1, depth=1
+         -> Entering function: index=1, depth=1
+            Current array: [1, 2]
+            -> BASE CASE: Printing permutation: 1 2
+         <- Exiting function: index=1, depth=1
+      <- Back from recursive call
+      After backtrack: [1, 2] (swapped back positions 0 and 0)
+   <- Finished trying element 1 at position 0
+   -> Trying to place element 2 at position 0
+      Before swap: [1, 2]
+      After swap:  [2, 1] (swapped positions 0 and 1)
+      -> Recursive call: index=1, depth=1
+         -> Entering function: index=1, depth=1
+            Current array: [2, 1]
+            -> BASE CASE: Printing permutation: 2 1
+         <- Exiting function: index=1, depth=1
+      <- Back from recursive call
+      After backtrack: [1, 2] (swapped back positions 0 and 1)
+   <- Finished trying element 2 at position 0
+<- Exiting function: index=0, depth=0
+
+Final array: [1, 2]
+
+FINAL OUTPUT:
+============
+
+1. "1 2"  (from [1,2])
+2. "2 1"  (from [2,1])
+
+KEY POINTS TO UNDERSTAND:
+========================
+
+1. **Only 2 elements** = Only 2 permutations possible
+2. **Each position gets filled exactly once**
+3. **We try every remaining element at each position**
+4. **Backtracking restores the array to original state**
+5. **The final array is back to [1, 2] after all permutations**
+
+This simple example makes it much easier to trace through the backtracking process! 

@@ -18,7 +18,7 @@ int fibonacci(int n)
 
 int main()
 {
-    int n = 5; // You can change this value to test with other numbers
+    int n = 7; // You can change this value to test with other numbers
     int result = fibonacci(n);
     cout << "Fibonacci number at position " << n << " is: " << result << endl;
     return 0;
